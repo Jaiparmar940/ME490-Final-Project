@@ -1,0 +1,10 @@
+﻿
+# Generated data and models
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+models/*.joblib
+models/*.pkl
+models/*.joblib.gz
+
