@@ -8,3 +8,5 @@ models/*.joblib
 models/*.pkl
 models/*.joblib.gz
 
+__pycache__/
+
