@@ -74,6 +74,12 @@ pip install -r requirements.txt
    python scripts/run_full_pipeline.py
    # orchestrates download → clean → features → train → evaluate (skips cached steps)
    ```
+5. **Clean up generated artifacts**
+   ```bash
+   python scripts/run_cleanup.py --dry-run        # preview deletions
+   python scripts/run_cleanup.py --recreate-dirs  # delete + recreate empty data/ + models/
+   ```
+   Removes everything under `data/raw/`, `data/processed/`, and `models/` so you can free space or restart from scratch.
 
 Key artifacts:
 - `data/raw/elasticity_raw.csv`: raw Materials Project pull.

@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 import argparse
+import json
 from pathlib import Path
 from typing import Dict
 import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
 from . import config
 from .train import load_feature_dataset
 from .visualization import plot_prediction_scatter, plot_residual_histogram
@@ -23,7 +25,6 @@ def _load_test_set(features_path: Path) -> tuple[pd.DataFrame, pd.Series]:
         return cached["X_test"], cached["y_test"]
 
     X, y = load_feature_dataset(features_path)
-    from sklearn.model_selection import train_test_split
 
     X_train, X_test, y_train, y_test = train_test_split(
         X,
@@ -32,8 +33,47 @@ def _load_test_set(features_path: Path) -> tuple[pd.DataFrame, pd.Series]:
         random_state=config.RANDOM_SEED,
     )
     joblib.dump({"X_test": X_test, "y_test": y_test}, config.TEST_SET_PATH)
+    split_metadata = {
+        "train_indices": X_train.index.tolist(),
+        "test_indices": X_test.index.tolist(),
+    }
+    ensure_dir(config.SPLIT_METADATA_PATH.parent)
+    with config.SPLIT_METADATA_PATH.open("w", encoding="utf-8") as handle:
+        json.dump(split_metadata, handle)
     logger.warning("Test split cache missing. Re-created using deterministic split.")
     return X_test, y_test
+
+
+def _load_train_set(features_path: Path) -> tuple[pd.DataFrame, pd.Series]:
+    """Reconstruct the training split using stored indices."""
+    X, y = load_feature_dataset(features_path)
+    if not config.SPLIT_METADATA_PATH.exists():
+        logger.warning(
+            "Split metadata missing. Recreating training split deterministically; metrics may differ."
+        )
+        X_train, _, y_train, _ = train_test_split(
+            X,
+            y,
+            test_size=config.TEST_SIZE,
+            random_state=config.RANDOM_SEED,
+        )
+        return X_train, y_train
+
+    with config.SPLIT_METADATA_PATH.open("r", encoding="utf-8") as handle:
+        metadata = json.load(handle)
+
+    train_indices = metadata.get("train_indices")
+    if not train_indices:
+        logger.warning("Split metadata lacks train indices; regenerating split.")
+        X_train, _, y_train, _ = train_test_split(
+            X,
+            y,
+            test_size=config.TEST_SIZE,
+            random_state=config.RANDOM_SEED,
+        )
+        return X_train, y_train
+
+    return X.loc[train_indices], y.loc[train_indices]
 
 
 def _compute_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float]:
@@ -51,6 +91,7 @@ def evaluate_models(
     """Evaluate saved models and persist plots."""
     ensure_dir(fig_dir)
     X_test, y_test = _load_test_set(features_path)
+    X_train, y_train = _load_train_set(features_path)
     model_paths = {
         "random_forest": models_dir / "random_forest.joblib",
         "mlp": models_dir / "mlp.joblib",
@@ -65,13 +106,25 @@ def evaluate_models(
         model = joblib.load(model_path)
         preds = model.predict(X_test)
         model_metrics = _compute_metrics(y_test, preds)
-        metrics[name] = model_metrics
+        train_preds = model.predict(X_train)
+        train_metrics = _compute_metrics(y_train, train_preds)
+        metrics[name] = {
+            "test": model_metrics,
+            "train": train_metrics,
+        }
         logger.info(
-            "%s Metrics -> MAE: %.3f | RMSE: %.3f | R2: %.3f",
+            "%s Test Metrics -> MAE: %.3f | RMSE: %.3f | R2: %.3f",
             name,
             model_metrics["MAE"],
             model_metrics["RMSE"],
             model_metrics["R2"],
+        )
+        logger.info(
+            "%s Train Metrics -> MAE: %.3f | RMSE: %.3f | R2: %.3f",
+            name,
+            train_metrics["MAE"],
+            train_metrics["RMSE"],
+            train_metrics["R2"],
         )
 
         plot_prediction_scatter(y_test.values, preds, fig_dir / f"{name}_pred_vs_true.png")
