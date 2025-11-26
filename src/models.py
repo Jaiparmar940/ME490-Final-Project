@@ -1,12 +1,10 @@
 """Model definitions and helper utilities."""
 
 from __future__ import annotations
-
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-
 from . import config
 
 

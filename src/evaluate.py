@@ -1,16 +1,13 @@
 """Model evaluation script for elastic modulus predictions."""
 
 from __future__ import annotations
-
 import argparse
 from pathlib import Path
 from typing import Dict
-
 import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-
 from . import config
 from .train import load_feature_dataset
 from .visualization import plot_prediction_scatter, plot_residual_histogram

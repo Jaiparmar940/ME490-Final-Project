@@ -1,13 +1,10 @@
 """Download elasticity data from the Materials Project API."""
 
 from __future__ import annotations
-
 import argparse
 from pathlib import Path
-
 import pandas as pd
 from mp_api.client import MPRester
-
 from . import config
 from .utils import ensure_dir, get_env_var, setup_logger
 
