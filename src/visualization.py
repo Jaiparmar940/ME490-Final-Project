@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from sklearn.model_selection import learning_curve
 from .utils import ensure_dir
 
 
@@ -80,6 +81,80 @@ def plot_correlation_heatmap(df: pd.DataFrame, save_path: Path | None = None) ->
     plt.figure(figsize=(8, 6))
     sns.heatmap(corr, cmap="viridis", annot=False)
     plt.title("Correlation Heatmap")
+    if save_path:
+        ensure_dir(save_path.parent)
+        plt.tight_layout()
+        plt.savefig(save_path, dpi=300)
+    plt.close()
+
+
+def plot_learning_curves(
+    estimator,
+    X: pd.DataFrame,
+    y: pd.Series,
+    save_path: Path | None = None,
+    cv: int = 5,
+    train_sizes: Sequence[float] | None = None,
+    scoring: str = "neg_mean_absolute_error",
+    n_jobs: int = -1,
+) -> None:
+    """Plot learning curves showing train/validation scores vs training set size.
+    
+    Args:
+        estimator: Fitted or unfitted scikit-learn estimator
+        X: Feature matrix
+        y: Target vector
+        save_path: Path to save the figure
+        cv: Number of cross-validation folds
+        train_sizes: Relative or absolute numbers of training examples to use.
+            If None, uses np.linspace(0.2, 1.0, 5) (20%, 40%, 60%, 80%, 100% of training data)
+        scoring: Scoring metric (default: neg_mean_absolute_error)
+        n_jobs: Number of parallel jobs (-1 for all cores)
+    """
+    if train_sizes is None:
+        train_sizes = np.linspace(0.2, 1.0, 5)  # 5 points: 20%, 40%, 60%, 80%, 100%
+    
+    train_sizes_abs, train_scores, val_scores = learning_curve(
+        estimator,
+        X,
+        y,
+        train_sizes=train_sizes,
+        cv=cv,
+        scoring=scoring,
+        n_jobs=n_jobs,
+        random_state=42,
+    )
+    
+    # Convert negative MAE to positive MAE for plotting
+    train_scores_mean = -np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    val_scores_mean = -np.mean(val_scores, axis=1)
+    val_scores_std = np.std(val_scores, axis=1)
+    
+    plt.figure(figsize=(8, 6))
+    plt.fill_between(
+        train_sizes_abs,
+        train_scores_mean - train_scores_std,
+        train_scores_mean + train_scores_std,
+        alpha=0.1,
+        color="steelblue",
+        label="Train ± 1 std",
+    )
+    plt.fill_between(
+        train_sizes_abs,
+        val_scores_mean - val_scores_std,
+        val_scores_mean + val_scores_std,
+        alpha=0.1,
+        color="coral",
+        label="Validation ± 1 std",
+    )
+    plt.plot(train_sizes_abs, train_scores_mean, "o-", color="steelblue", label="Train MAE")
+    plt.plot(train_sizes_abs, val_scores_mean, "o-", color="coral", label="Validation MAE")
+    plt.xlabel("Training Set Size")
+    plt.ylabel("Mean Absolute Error (GPa)")
+    plt.title("Learning Curves")
+    plt.legend(loc="best")
+    plt.grid(True, alpha=0.3)
     if save_path:
         ensure_dir(save_path.parent)
         plt.tight_layout()

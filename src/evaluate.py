@@ -12,7 +12,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from . import config
 from .train import load_feature_dataset
-from .visualization import plot_prediction_scatter, plot_residual_histogram
+from .visualization import plot_prediction_scatter, plot_residual_histogram, plot_learning_curves
 from .utils import ensure_dir, setup_logger
 
 logger = setup_logger(__name__)
@@ -129,6 +129,16 @@ def evaluate_models(
 
         plot_prediction_scatter(y_test.values, preds, fig_dir / f"{name}_pred_vs_true.png")
         plot_residual_histogram(y_test.values - preds, fig_dir / f"{name}_residuals.png")
+        
+        # Generate learning curves
+        logger.info("Generating learning curves for %s...", name)
+        plot_learning_curves(
+            model,
+            X_train,
+            y_train,
+            save_path=fig_dir / f"{name}_learning_curves.png",
+            cv=config.N_FOLDS,
+        )
 
         if name == "random_forest" and hasattr(model.named_steps.get("model"), "feature_importances_"):
             importances = model.named_steps["model"].feature_importances_
