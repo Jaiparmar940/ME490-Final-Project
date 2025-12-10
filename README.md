@@ -140,7 +140,7 @@ All evaluation metrics, diagnostic plots (prediction scatter plots, residual dis
 
 ### AI-Assisted Development Attribution
 
-This project utilized AI-assisted code generation through Cursor (an AI-powered code editor) to accelerate development. All Python source files in this repository were created by prompting Cursor with specific requirements, and each file includes header comments documenting the prompt used to generate it.
+This project utilized AI-assisted code generation through Cursor (an AI-powered code editor) to accelerate development. Many Python source files in this repository were created by prompting Cursor with specific requirements, and each file includes header comments documenting the prompt used to generate it.
 
 **Key Points:**
 - **Code Generation**: All source code files were generated using Cursor AI based on detailed prompts describing the desired functionality
