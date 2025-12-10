@@ -75,6 +75,68 @@ def plot_feature_importances(importances: Sequence[float], feature_names: Sequen
     plt.close()
 
 
+def analyze_feature_importance_by_group(
+    importances: Sequence[float], feature_names: Sequence[str]
+) -> dict:
+    """Analyze feature importances grouped by feature type.
+    
+    Returns a dictionary with grouped analysis including:
+    - Total importance per group
+    - Top 5 features per group
+    - Percentage contribution
+    """
+    import pandas as pd
+    
+    # Create DataFrame
+    importance_df = pd.DataFrame({
+        'feature': feature_names,
+        'importance': importances
+    }).sort_values('importance', ascending=False)
+    
+    # Group features
+    magpie_features = importance_df[importance_df['feature'].str.startswith('MagpieData')]
+    element_fraction_features = importance_df[importance_df['feature'].str.startswith('ElementFraction')]
+    engineered_features = importance_df[importance_df['feature'].isin([
+        'mean_atomic_number', 'max_atomic_number', 'avg_valence_electrons'
+    ])]
+    symmetry_features = importance_df[
+        importance_df['feature'].str.startswith('crys_') | 
+        importance_df['feature'].str.startswith('sg_')
+    ]
+    
+    # Calculate totals
+    total_all = importance_df['importance'].sum()
+    
+    groups = {
+        'Magpie Statistical Features': {
+            'df': magpie_features,
+            'total': magpie_features['importance'].sum(),
+            'percentage': (magpie_features['importance'].sum() / total_all) * 100,
+            'top_5': magpie_features.head(5).to_dict('records')
+        },
+        'ElementFraction Features': {
+            'df': element_fraction_features,
+            'total': element_fraction_features['importance'].sum(),
+            'percentage': (element_fraction_features['importance'].sum() / total_all) * 100,
+            'top_5': element_fraction_features.head(5).to_dict('records')
+        },
+        'Engineered Features': {
+            'df': engineered_features,
+            'total': engineered_features['importance'].sum(),
+            'percentage': (engineered_features['importance'].sum() / total_all) * 100,
+            'top_5': engineered_features.head(5).to_dict('records')
+        },
+        'Symmetry Features': {
+            'df': symmetry_features,
+            'total': symmetry_features['importance'].sum(),
+            'percentage': (symmetry_features['importance'].sum() / total_all) * 100,
+            'top_5': symmetry_features.head(5).to_dict('records')
+        }
+    }
+    
+    return groups
+
+
 def plot_correlation_heatmap(df: pd.DataFrame, save_path: Path | None = None) -> None:
     """Plot a correlation heatmap of the provided dataframe columns."""
     corr = df.corr()

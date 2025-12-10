@@ -143,9 +143,33 @@ def evaluate_models(
         if name == "random_forest" and hasattr(model.named_steps.get("model"), "feature_importances_"):
             importances = model.named_steps["model"].feature_importances_
             feature_names = X_test.columns
-            from .visualization import plot_feature_importances
+            from .visualization import plot_feature_importances, analyze_feature_importance_by_group
 
             plot_feature_importances(importances, feature_names, fig_dir / "rf_feature_importances.png")
+            
+            # Analyze feature importance by group
+            logger.info("Analyzing feature importance by group...")
+            groups = analyze_feature_importance_by_group(importances, feature_names)
+            for group_name, group_data in groups.items():
+                logger.info(
+                    "%s: Total importance = %.4f (%.1f%%), Top feature = %s (%.6f)",
+                    group_name,
+                    group_data['total'],
+                    group_data['percentage'],
+                    group_data['top_5'][0]['feature'] if group_data['top_5'] else 'N/A',
+                    group_data['top_5'][0]['importance'] if group_data['top_5'] else 0.0,
+                )
+            metrics[name]["feature_importance_groups"] = {
+                k: {
+                    "total_importance": float(v['total']),
+                    "percentage": float(v['percentage']),
+                    "top_5": [
+                        {"feature": item['feature'], "importance": float(item['importance'])}
+                        for item in v['top_5']
+                    ]
+                }
+                for k, v in groups.items()
+            }
 
         crystal_cols = [c for c in X_test.columns if c.startswith("crys_")]
         if crystal_cols:
