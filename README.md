@@ -104,6 +104,40 @@ With dependencies installed and `MP_API_KEY` provided, running `python scripts/r
 
 ---
 
+### Results Summary
+
+#### Model Performance
+
+**Random Forest Regressor:**
+- **Test Set Performance**: MAE = 23.80 GPa, RMSE = 38.22 GPa, R² = 0.836
+- **Training Set Performance**: MAE = 11.43 GPa, RMSE = 21.25 GPa, R² = 0.949
+- **Cross-Validation**: Best CV MAE = 25.37 GPa (std = 1.27 GPa)
+- **Best Hyperparameters**: n_estimators=600, max_depth=25, min_samples_split=2, min_samples_leaf=2, max_features=0.6
+
+**Multilayer Perceptron (MLP):**
+- **Test Set Performance**: MAE = 27.73 GPa, RMSE = 44.63 GPa, R² = 0.776
+- **Training Set Performance**: MAE = 11.72 GPa, RMSE = 19.57 GPa, R² = 0.957
+- **Cross-Validation**: Best CV MAE = 28.41 GPa (std = 1.10 GPa)
+- **Best Hyperparameters**: hidden_layer_sizes=(256, 128, 64), activation='relu', alpha=0.01, learning_rate_init=0.005
+
+#### Key Findings
+
+1. **Random Forest outperforms MLP** on the test set, achieving ~4 GPa lower MAE and ~0.06 higher R²
+2. **Feature Importance Analysis** (Random Forest):
+   - **Magpie Statistical Features**: 96.9% of total importance (dominant contributor)
+     - Top feature: `MagpieData mean GSvolume_pa` (21.6% importance)
+   - **Engineered Features**: 1.2% of total importance
+     - Top feature: `avg_valence_electrons` (0.8% importance)
+   - **Symmetry Features**: 1.8% of total importance
+     - Top feature: `sg_201_230` (high symmetry space groups, 0.4% importance)
+   - **ElementFraction Features**: <0.1% of total importance (negligible)
+3. **Model Generalization**: Both models show a train-test gap (train R² ~0.95 vs test R² ~0.78-0.84), indicating some overfitting, though Random Forest generalizes better
+4. **Prediction Accuracy**: Most predictions fall within ±25-30 GPa of true values for Random Forest, suitable for materials screening applications
+
+All evaluation metrics, diagnostic plots (prediction scatter plots, residual distributions, learning curves, feature importances), and per-crystal-system performance breakdowns are saved in `data/processed/figures/` and `models/evaluation_metrics.joblib`.
+
+---
+
 ### AI-Assisted Development Attribution
 
 This project utilized AI-assisted code generation through Cursor (an AI-powered code editor) to accelerate development. All Python source files in this repository were created by prompting Cursor with specific requirements, and each file includes header comments documenting the prompt used to generate it.
