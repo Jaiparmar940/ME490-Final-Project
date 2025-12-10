@@ -89,6 +89,8 @@ Key artifacts:
 - `models/random_forest.joblib`, `models/mlp.joblib`: tuned estimators.
 - `data/processed/figures/`: prediction vs. truth, residuals, target distribution, RF feature importances, etc.
 
+**Note**: Due to GitHub file size limits, the data files and pretrained model files (`.joblib` files) are not included in this repository. To reproduce the results, run the full pipeline (`python scripts/run_full_pipeline.py`) which will download the data and train the models. The `.gitignore` file excludes these large artifacts from version control.
+
 ### Module Highlights
 - `src.config`: central paths, random seed, split ratio, and hyperparameter grids.
 - `src.data_download`: pulls only entries with complete elasticity tensors via `MPRester`.
