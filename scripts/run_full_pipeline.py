@@ -1,4 +1,8 @@
-"""Entry script to execute the complete elasticity ML pipeline."""
+"""Entry script to execute the complete elasticity ML pipeline.
+
+This file was created by prompting Cursor with:
+"Create an end-to-end pipeline script that orchestrates data download, preprocessing, feature engineering, model training, and evaluation with caching"
+"""
 
 from __future__ import annotations
 

@@ -1,4 +1,8 @@
-"""Utility script to delete generated data/model artifacts."""
+"""Utility script to delete generated data/model artifacts.
+
+This file was created by prompting Cursor with:
+"Create a cleanup utility script to delete generated data and model artifacts with dry-run and directory recreation options"
+"""
 
 from __future__ import annotations
 

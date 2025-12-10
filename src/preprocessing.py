@@ -1,4 +1,10 @@
-"""Data cleaning utilities for elasticity dataset."""
+"""Data cleaning utilities for elasticity dataset.
+
+This file was created by prompting Cursor with:
+"Create data preprocessing functions to clean Materials Project elasticity data, compute VRH Young's modulus, remove outliers, and deduplicate entries"
+
+Design choices (outlier filtering thresholds, deduplication strategy, VRH computation method) were made by Jay Parmar.
+"""
 
 from __future__ import annotations
 import argparse

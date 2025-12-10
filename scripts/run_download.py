@@ -1,4 +1,8 @@
-"""Convenience script to download Materials Project elasticity data."""
+"""Convenience script to download Materials Project elasticity data.
+
+This file was created by prompting Cursor with:
+"Create a convenience script to download Materials Project elasticity data using the data_download module"
+"""
 
 from __future__ import annotations
 

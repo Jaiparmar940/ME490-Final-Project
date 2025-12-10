@@ -1,4 +1,8 @@
-"""Download elasticity data from the Materials Project API."""
+"""Download elasticity data from the Materials Project API.
+
+This file was created by prompting Cursor with:
+"Create a script to download elasticity data from the Materials Project API using MPRester, merging summary and elasticity endpoints"
+"""
 
 from __future__ import annotations
 import argparse

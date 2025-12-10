@@ -43,7 +43,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-**Materials Project API key**
+**Materials Project API key (mine is provided out of the box)**
 - Generate a key at https://materialsproject.org/dashboard.
 - Export it as an environment variable (or place it in a `.env` file; `python-dotenv` is loaded automatically):
   ```powershell
@@ -101,5 +101,20 @@ Key artifacts:
 - `scripts/run_*`: thin orchestration wrappers to simplify reproducible CLI execution.
 
 With dependencies installed and `MP_API_KEY` provided, running `python scripts/run_full_pipeline.py` will regenerate every artifact and quantify how close composition + symmetry descriptors can get to high-fidelity elastic modulus predictions without explicit structural models.
+
+---
+
+### AI-Assisted Development Attribution
+
+This project utilized AI-assisted code generation through Cursor (an AI-powered code editor) to accelerate development. All Python source files in this repository were created by prompting Cursor with specific requirements, and each file includes header comments documenting the prompt used to generate it.
+
+**Key Points:**
+- **Code Generation**: All source code files were generated using Cursor AI based on detailed prompts describing the desired functionality
+- **Design Decisions**: All design choices (feature engineering strategies, model architectures, hyperparameter grids, preprocessing approaches) were made by Jay Parmar
+- **Hyperparameter Tuning**: Model hyperparameter tuning and selection was performed by Jay Parmar
+- **Code Review & Validation**: All AI-generated code was reviewed, tested, and validated to ensure correctness and alignment with project requirements
+- **Transparency**: Each Python file contains header comments indicating it was created via Cursor prompting, with the specific prompt documented
+
+The use of AI-assisted development tools significantly accelerated the implementation timeline while maintaining full control over design decisions and ensuring code quality through thorough review and testing.
 
 

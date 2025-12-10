@@ -1,4 +1,8 @@
-"""Script to clean data, build features, and train models."""
+"""Script to clean data, build features, and train models.
+
+This file was created by prompting Cursor with:
+"Create a script to orchestrate data cleaning, feature engineering, and model training with caching of intermediate results"
+"""
 
 from __future__ import annotations
 

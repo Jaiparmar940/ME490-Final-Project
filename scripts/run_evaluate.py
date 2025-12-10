@@ -1,4 +1,8 @@
-"""Script to evaluate trained models and generate figures."""
+"""Script to evaluate trained models and generate figures.
+
+This file was created by prompting Cursor with:
+"Create a script to evaluate trained models and generate diagnostic plots and metrics"
+"""
 
 from __future__ import annotations
 

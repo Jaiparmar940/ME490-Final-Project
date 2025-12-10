@@ -1,4 +1,10 @@
-"""Training and hyperparameter tuning for elastic modulus models."""
+"""Training and hyperparameter tuning for elastic modulus models.
+
+This file was created by prompting Cursor with:
+"Create training functions for Random Forest and MLP models using RandomizedSearchCV with 5-fold cross-validation, including train/test split persistence"
+
+Hyperparameter tuning was performed by Jay Parmar.
+"""
 
 from __future__ import annotations
 import argparse

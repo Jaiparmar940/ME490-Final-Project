@@ -1,4 +1,10 @@
-"""Model definitions and helper utilities."""
+"""Model definitions and helper utilities.
+
+This file was created by prompting Cursor with:
+"Create model pipeline definitions for Random Forest and MLP regressors with scikit-learn, including feature scaling for MLP"
+
+Design choices (model architectures, base hyperparameters, pipeline structure) were made by Jay Parmar.
+"""
 
 from __future__ import annotations
 from sklearn.ensemble import RandomForestRegressor

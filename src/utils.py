@@ -1,4 +1,8 @@
-"""Common utilities for logging, reproducibility, and path handling."""
+"""Common utilities for logging, reproducibility, and path handling.
+
+This file was created by prompting Cursor with:
+"Create utility functions for logging setup, random seed management, directory creation, environment variable loading, and JSON serialization"
+"""
 
 from __future__ import annotations
 import json

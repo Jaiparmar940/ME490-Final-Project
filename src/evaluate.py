@@ -1,4 +1,8 @@
-"""Model evaluation script for elastic modulus predictions."""
+"""Model evaluation script for elastic modulus predictions.
+
+This file was created by prompting Cursor with:
+"Create model evaluation functions to compute MAE, RMSE, R² metrics, generate prediction/residual plots, learning curves, feature importance analysis, and per-crystal-system performance breakdowns"
+"""
 
 from __future__ import annotations
 import argparse

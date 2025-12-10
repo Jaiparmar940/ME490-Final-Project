@@ -1,4 +1,11 @@
-"""Central configuration for the elastic-modulus project."""
+"""Central configuration for the elastic-modulus project.
+
+This file was created by prompting Cursor with:
+"Create a central configuration file for an elastic modulus ML project with paths, random seeds, and hyperparameter grids for Random Forest and MLP models"
+
+Design choices (hyperparameter grids, split ratios, random seed) were made by Jay Parmar.
+Hyperparameter tuning was performed by Jay Parmar.
+"""
 
 from pathlib import Path
 

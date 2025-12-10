@@ -1,4 +1,8 @@
-"""Reusable plotting helpers."""
+"""Reusable plotting helpers.
+
+This file was created by prompting Cursor with:
+"Create visualization functions for plotting target distributions, prediction scatter plots, residual histograms, feature importances, correlation heatmaps, learning curves, and feature importance analysis by group"
+"""
 
 from __future__ import annotations
 from pathlib import Path

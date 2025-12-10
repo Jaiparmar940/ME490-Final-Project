@@ -1,4 +1,10 @@
-"""Feature engineering using matminer for elastic modulus prediction."""
+"""Feature engineering using matminer for elastic modulus prediction.
+
+This file was created by prompting Cursor with:
+"Create feature engineering functions using matminer to generate compositional features (ElementFraction, Magpie statistics), symmetry features (crystal system, space group bins), and engineered features (mean atomic number, max atomic number, average valence electrons)"
+
+Design choices (feature selection, space group binning strategy, engineered feature definitions) were made by Jay Parmar.
+"""
 
 from __future__ import annotations
 import argparse
